@@ -18,4 +18,16 @@ function App() {
   );
 }
 
+import HerbList from "./components/HerbList";
+
+function App() {
+  return (
+    <div>
+      <h1>HerbaMatch</h1>
+      <HerbList />
+    </div>
+  );
+}
+
+
 export default App;

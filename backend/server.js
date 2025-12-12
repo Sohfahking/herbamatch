@@ -12,6 +12,9 @@ app.get("/", (req, res) => {
     res.send("Server is running");
 });
 
+import herbRoutes from "./routes/herbRoutes.js";
+app.use("/api", herbRoutes);
+
 
 // Connect to MongoDB
 dotenv.config();
