@@ -1,23 +1,23 @@
 import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+import herbRoutes from "./routes/herbRoutes.js";
 
+dotenv.config();
 const app = express();
-app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("Server is running");
-});
-
-import herbRoutes from "./routes/herbRoutes.js";
 app.use("/api", herbRoutes);
 
+const PORT = process.env.PORT || 5000;
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB connected");
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch(err => console.error(err));
 
 // Connect to MongoDB
-dotenv.config();
 
 const uri = process.env.MONGO_URI;
 
@@ -35,26 +35,6 @@ export async function run() {
   }
 }
 
-const userSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-});
-
-const herbSchema = new mongoose.Schema({
-  name: String,
-  category: String,
-  stock: Number,
-});
-
-const kitSchema = new mongoose.Schema({
-  name: String,
-  herbs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Herb" }],
-});
-
-const User = mongoose.model("User", userSchema);
-const Herb = mongoose.model("Herb", herbSchema);
-const Kit = mongoose.model("Kit", kitSchema);
-
 // --- Authentication route ---
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
@@ -69,9 +49,13 @@ app.post("/login", async (req, res) => {
 
 // --- Herbs CRUD ---
 // Get all herbs
-app.get("/herbs", async (req, res) => {
-  const herbs = await Herb.find();
-  res.json(herbs);
+app.get('/api/herbs', async (req, res) => {
+  try {
+    const herbs = await Herb.find({});
+    res.json(herbs);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch herbs' });
+  }
 });
 
 // Create new herb

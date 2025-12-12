@@ -8,6 +8,8 @@ const userSchema = new mongoose.Schema({
   kits: [{ type: mongoose.Schema.Types.ObjectId, ref: "Kit" }]
 });
 
-const User = mongoose.model("User", userSchema);
+
+const User = mongoose.models.ModelName ||mongoose.model("User", userSchema);
+
 
 export default User; 

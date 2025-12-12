@@ -7,7 +7,8 @@ const kitSchema = new mongoose.Schema({
   totalPrice: Number
 });
 
-const Kit = mongoose.model("Kit", kitSchema);
+
+const Kit = mongoose.models.Kit || mongoose.model("Kit", kitSchema);
 
 export default Kit; 
 

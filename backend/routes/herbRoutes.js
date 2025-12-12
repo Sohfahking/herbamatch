@@ -1,3 +1,8 @@
+import express from "express";
+import Herb from "../models/Herb.js";
+
+const router = express.Router();
+
 router.get("/herbs", async (req, res) => {
   try {
     const herbs = await Herb.find();
@@ -7,4 +12,5 @@ router.get("/herbs", async (req, res) => {
   }
 });
 
+export default router;
 
